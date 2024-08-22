@@ -95,16 +95,16 @@
                 if (places === undefined) {
                   //找不到地標
                   elInfo.textContent = `● 目前位置附近查詢不到任何地標資訊，請移動到其他位置後點選下方【重整】鈕進行查詢。`;
-                  // alert(
-                  //   `● 目前位置附近查詢不到任何地標資訊，請移動到其他位置後點選下方【重整】鈕進行查詢。`
-                  // );
+                  alert(
+                    `● 目前位置附近查詢不到任何地標資訊，請移動到其他位置後點選下方【重整】鈕進行查詢。`
+                  );
                 } else {
                   renderPlaces(places);
                   elInfo.textContent =  `● ${places.length} 筆資料載入完成，請轉動鏡頭找尋物件。\n● 點選物件可顯示資訊。\n● 【重整】鈕可重新查詢附近地標。`
 
-                  // alert(
-                  //   `● ${places.length} 筆資料載入完成，請轉動鏡頭找尋物件。\n● 點選物件可顯示資訊。\n● 【重整】鈕可重新查詢附近地標。`
-                  // );
+                  alert(
+                    `● ${places.length} 筆資料載入完成，請轉動鏡頭找尋物件。\n● 點選物件可顯示資訊。\n● 【重整】鈕可重新查詢附近地標。`
+                  );
                 }
                   poi_download = true;
                 let scene = document.querySelector("a-scene");
