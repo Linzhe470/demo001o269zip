@@ -258,7 +258,9 @@
     <script>
       // 提供記錄是否已下載完 poi 資料，於 gps 更新時不再載一次
       let poi_download = false;
-
+      const elInfo = document.querySelector(".arjs-loader-div");
+      elInfo.textContent = `GPS 訊號及資料讀取中`;
+      
       window.onload = () => {
         const el = document.querySelector("[gps-new-camera]");
 
