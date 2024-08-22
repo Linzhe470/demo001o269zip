@@ -88,7 +88,7 @@
                 }
                 elInfo.textContent = `🟢執行dynamicLoadPlaces()成功`;
                 // return response.json();
-                elInfo.innerHTML = `<pre>${response.json()}</pre>`;
+               console.log(response.json())
                 let { places } = response.json();
                 if (places === undefined) {
                   //找不到地標
@@ -258,7 +258,7 @@
       <div class="arjs-loader-div"></div>
     </div>
     <div class="header">
-      AR：顯示6
+      AR：顯示5
       <button class="reload-poi-button">重整</button>
     </div>
     <div class="footer">
