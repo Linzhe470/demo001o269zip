@@ -28,7 +28,7 @@
             const el = document.querySelector("[gps-new-camera]");
 
             el.addEventListener("gps-camera-update-position", e => {
-
+              alert('gps-camera-update-position')
                 if ("geolocation" in navigator) {
 
                     const options = {
@@ -37,17 +37,18 @@
                         maximumAge: 0,
                     };
                     //https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/getCurrentPosition
+                    // 執行定位navigator.geolocation.getCurrentPosition
                     navigator.geolocation.getCurrentPosition((position) => {
                         // 顯示 GPS 精度
                         document.getElementById('gps-info').textContent += ` 誤差 ${position.coords.accuracy.toFixed(1)} m`;
-
+                        alert('navigator.geolocation.getCurrentPosition')
                     }
                         //,()=>{},options
                     );
 
                     // 顯示抓到的 GPS 坐標資訊
                     document.getElementById('gps-info').textContent = `lon ${e.detail.position.longitude.toFixed(4)} lat ${e.detail.position.latitude.toFixed(4)}`;
-
+                    alert('e.detail.position')
 
                     if (!poi_download) {
 
