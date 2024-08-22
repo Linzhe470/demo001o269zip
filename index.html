@@ -32,7 +32,7 @@
 
             el.addEventListener("gps-camera-update-position", e => {
                 if ("geolocation" in navigator) {
-
+                  elInfo.textContent=`🟢有|navigator中已具有geolocation`;
                     const options = {
                         enableHighAccuracy: true,
                         timeout: 5000,
@@ -43,7 +43,7 @@
                     navigator.geolocation.getCurrentPosition((position) => {
                         // 顯示 GPS 精度
                         document.getElementById('gps-info').textContent += ` 誤差 ${position.coords.accuracy.toFixed(1)} m`;
-                        elInfo.textContent=`執行getCurrentPosition`;
+                        elInfo.textContent=`執行getCurrentPosition()`;
                     }
                         //,()=>{},options
                     );
@@ -53,7 +53,7 @@
                     elInfo.textContent=`抓到GPS`;
 
                     if (!poi_download) {
-
+                      elInfo.textContent=`🔴無poi_download`;
                         // 使用 api 即時查回的資料
                         // than use it to load from remote APIs some places nearby
                         return dynamicLoadPlaces(e.detail.position)
@@ -95,6 +95,7 @@
 
 
                 } else {
+                  elInfo.textContent=`🔴無|navigator中未具有geolocation`;
                     /* geolocation IS NOT available */
                 }
 
@@ -117,7 +118,7 @@
         // 透過 Google Place searchNearby 新版 API 取得地標資料
         function dynamicLoadPlaces(position) {
 
-
+          elInfo.textContent=`🟠執行dynamicLoadPlaces()|呼叫QueryHandler.ashx`;
             return fetch('QueryHandler.ashx', {
                 method: 'POST',
                 headers: {
@@ -212,7 +213,7 @@
         <div class="arjs-loader-div"></div>
     </div>
     <div class="header">
-      AR：顯示2
+      AR：顯示3
       <button class="reload-poi-button">重整</button>
     </div>
     <div class="footer">
