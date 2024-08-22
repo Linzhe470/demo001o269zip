@@ -26,6 +26,9 @@
         window.onload = () => {
 
             const el = document.querySelector("[gps-new-camera]");
+            const elInfo = document.querySelector(".arjs-loader-div");
+
+            elInfo.textContent=`GPS 訊號及資料讀取中`;
 
             el.addEventListener("gps-camera-update-position", e => {
               alert('gps-camera-update-position')
@@ -41,14 +44,14 @@
                     navigator.geolocation.getCurrentPosition((position) => {
                         // 顯示 GPS 精度
                         document.getElementById('gps-info').textContent += ` 誤差 ${position.coords.accuracy.toFixed(1)} m`;
-                        alert('navigator.geolocation.getCurrentPosition')
+                        elInfo.textContent=`執行getCurrentPosition`;
                     }
                         //,()=>{},options
                     );
 
                     // 顯示抓到的 GPS 坐標資訊
                     document.getElementById('gps-info').textContent = `lon ${e.detail.position.longitude.toFixed(4)} lat ${e.detail.position.latitude.toFixed(4)}`;
-                    alert('e.detail.position')
+                    elInfo.textContent=`抓到GPS`;
 
                     if (!poi_download) {
 
@@ -207,10 +210,10 @@
 
 <body style="margin : 0px; overflow: hidden;">
     <div class="arjs-loader">
-        <div>GPS 訊號及資料讀取中</div>
+        <div class="arjs-loader-div"></div>
     </div>
     <div class="header">
-      AR：顯示
+      AR：顯示1
       <button class="reload-poi-button">重整</button>
     </div>
     <div class="footer">
