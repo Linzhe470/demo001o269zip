@@ -78,8 +78,8 @@
                   "Content-Type": "application/json",
                   "X-RW-Api-Key": "googleplacenearby",
                   "X-RW-Api-Buffer-Meters": 200,
-                  "X-RW-Api-Lng": e.detail.longitude,
-                  "X-RW-Api-Lat": e.detail.latitude,
+                  "X-RW-Api-Lng": e.detail.position.longitude,
+                  "X-RW-Api-Lat": e.detail.position.latitude,
                 },
               }).then((response) => {
                 if (!response.ok) {
@@ -87,19 +87,24 @@
                   // throw new Error("Network response was not ok");
                 }
                 elInfo.textContent = `🟢執行dynamicLoadPlaces()成功`;
+                elInfo.textContent = `x${e.detail.position.longitude}y${e.detail.position.latitude}`;
                 // return response.json();
                console.log(response.json())
                 let { places } = response.json();
+
                 if (places === undefined) {
                   //找不到地標
-                  alert(
-                    `● 目前位置附近查詢不到任何地標資訊，請移動到其他位置後點選下方【重整】鈕進行查詢。`
-                  );
+                  elInfo.textContent = `● 目前位置附近查詢不到任何地標資訊，請移動到其他位置後點選下方【重整】鈕進行查詢。`;
+                  // alert(
+                  //   `● 目前位置附近查詢不到任何地標資訊，請移動到其他位置後點選下方【重整】鈕進行查詢。`
+                  // );
                 } else {
                   renderPlaces(places);
-                  alert(
-                    `● ${places.length} 筆資料載入完成，請轉動鏡頭找尋物件。\n● 點選物件可顯示資訊。\n● 【重整】鈕可重新查詢附近地標。`
-                  );
+                  elInfo.textContent =  `● ${places.length} 筆資料載入完成，請轉動鏡頭找尋物件。\n● 點選物件可顯示資訊。\n● 【重整】鈕可重新查詢附近地標。`
+
+                  // alert(
+                  //   `● ${places.length} 筆資料載入完成，請轉動鏡頭找尋物件。\n● 點選物件可顯示資訊。\n● 【重整】鈕可重新查詢附近地標。`
+                  // );
                 }
                   poi_download = true;
                 let scene = document.querySelector("a-scene");
@@ -258,7 +263,7 @@
       <div class="arjs-loader-div"></div>
     </div>
     <div class="header">
-      AR：顯示5
+      AR：顯示6
       <button class="reload-poi-button">重整</button>
     </div>
     <div class="footer">
