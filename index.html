@@ -16,7 +16,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap" rel="stylesheet">
 
-    <link href="./css/style.css" rel="stylesheet">
+    <link href="./css/style2.css" rel="stylesheet">
     <!-- 共用 AFRAME 事件註冊 -->
     <script src="./scripts/AFRAMEregister.js"></script>
     <script>
@@ -31,7 +31,6 @@
             elInfo.textContent=`GPS 訊號及資料讀取中`;
 
             el.addEventListener("gps-camera-update-position", e => {
-              alert('gps-camera-update-position')
                 if ("geolocation" in navigator) {
 
                     const options = {
@@ -213,7 +212,7 @@
         <div class="arjs-loader-div"></div>
     </div>
     <div class="header">
-      AR：顯示1
+      AR：顯示2
       <button class="reload-poi-button">重整</button>
     </div>
     <div class="footer">
