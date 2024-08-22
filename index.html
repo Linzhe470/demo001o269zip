@@ -65,13 +65,15 @@
               4
             )} lat ${e.detail.position.latitude.toFixed(4)}`;
             elInfo.textContent = `抓到GPS`;
+            elInfo.textContent = `🔴poi_download:${poi_download}`;
 
             if (!poi_download) {
-              elInfo.textContent = `🔴無poi_download`;
+              // elInfo.textContent = `🔴無poi_download`;
               // 使用 api 即時查回的資料
               // than use it to load from remote APIs some places nearby
               // dynamicLoadPlaces(e.detail.position)
               elInfo.textContent = `🟠執行dynamicLoadPlaces()|呼叫QueryHandler.ashx`;
+              elInfo.textContent = `🟠執行x${e.detail.position.longitude}y${e.detail.position.latitude}`;
               fetch("QueryHandler.ashx", {
                 method: "POST",
                 headers: {
@@ -87,7 +89,6 @@
                   // throw new Error("Network response was not ok");
                 }
                 elInfo.textContent = `🟢執行dynamicLoadPlaces()成功`;
-                elInfo.textContent = `x${e.detail.position.longitude}y${e.detail.position.latitude}`;
                 // return response.json();
                console.log(response.json())
                 let { places } = response.json();
@@ -99,32 +100,32 @@
                     `● 目前位置附近查詢不到任何地標資訊，請移動到其他位置後點選下方【重整】鈕進行查詢。`
                   );
                 } else {
-                  renderPlaces(places);
+                  // renderPlaces(places);
                   elInfo.textContent =  `● ${places.length} 筆資料載入完成，請轉動鏡頭找尋物件。\n● 點選物件可顯示資訊。\n● 【重整】鈕可重新查詢附近地標。`
 
                   alert(
                     `● ${places.length} 筆資料載入完成，請轉動鏡頭找尋物件。\n● 點選物件可顯示資訊。\n● 【重整】鈕可重新查詢附近地標。`
                   );
                 }
-                  poi_download = true;
-                let scene = document.querySelector("a-scene");
-                // 增加公司 資料
-                const rwlogoEntity = document.createElement("a-entity");
-                rwlogoEntity.setAttribute("gps-new-entity-place", {
-                  latitude: e.detail.position.latitude,
-                  longitude: e.detail.position.longitude,
-                });
-                // Logo
-                elInfo.textContent = `🟢新增a-image`;
-                const rwlogo = document.createElement("a-image");
-                rwlogo.setAttribute("look-at", "#acamera");
-                rwlogo.setAttribute("src", "./assets/RWLOGO-02-50.png");
-                rwlogo.setAttribute("scale", { x: 10, y: 10, z: 10 });
-                rwlogo.setAttribute("rotation", { x: -90, y: 0, z: 0 });
-                rwlogo.setAttribute("position", { x: 0, y: -30, z: 0 });
-                rwlogoEntity.appendChild(rwlogo);
+                //   poi_download = true;
+                // let scene = document.querySelector("a-scene");
+                // // 增加公司 資料
+                // const rwlogoEntity = document.createElement("a-entity");
+                // rwlogoEntity.setAttribute("gps-new-entity-place", {
+                //   latitude: e.detail.position.latitude,
+                //   longitude: e.detail.position.longitude,
+                // });
+                // // Logo
+                // elInfo.textContent = `🟢新增a-image`;
+                // const rwlogo = document.createElement("a-image");
+                // rwlogo.setAttribute("look-at", "#acamera");
+                // rwlogo.setAttribute("src", "./assets/RWLOGO-02-50.png");
+                // rwlogo.setAttribute("scale", { x: 10, y: 10, z: 10 });
+                // rwlogo.setAttribute("rotation", { x: -90, y: 0, z: 0 });
+                // rwlogo.setAttribute("position", { x: 0, y: -30, z: 0 });
+                // rwlogoEntity.appendChild(rwlogo);
 
-                scene.appendChild(rwlogoEntity);
+                // scene.appendChild(rwlogoEntity);
               });
               // return dynamicLoadPlaces(e.detail.position).then((apiPlaces) => {
               //   let { places } = apiPlaces;
@@ -263,7 +264,7 @@
       <div class="arjs-loader-div"></div>
     </div>
     <div class="header">
-      AR：顯示6
+      AR：顯示7
       <button class="reload-poi-button">重整</button>
     </div>
     <div class="footer">
