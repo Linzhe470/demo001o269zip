@@ -70,8 +70,25 @@
               elInfo.textContent = `🔴無poi_download`;
               // 使用 api 即時查回的資料
               // than use it to load from remote APIs some places nearby
-              dynamicLoadPlaces(e.detail.position)
-
+              // dynamicLoadPlaces(e.detail.position)
+              elInfo.textContent = `🟠執行dynamicLoadPlaces()|呼叫QueryHandler.ashx`;
+              fetch("QueryHandler.ashx", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  "X-RW-Api-Key": "googleplacenearby",
+                  "X-RW-Api-Buffer-Meters": 200,
+                  "X-RW-Api-Lng": e.detail.longitude,
+                  "X-RW-Api-Lat": e.detail.latitude,
+                },
+              }).then((response) => {
+                if (!response.ok) {
+                  elInfo.textContent = `🔴執行dynamicLoadPlaces()失敗`;
+                  // throw new Error("Network response was not ok");
+                }
+                elInfo.textContent = `🟢執行dynamicLoadPlaces()成功`;
+                // return response.json();
+              });
               // return dynamicLoadPlaces(e.detail.position).then((apiPlaces) => {
               //   let { places } = apiPlaces;
               //   if (places === undefined) {
@@ -209,7 +226,7 @@
       <div class="arjs-loader-div"></div>
     </div>
     <div class="header">
-      AR：顯示4
+      AR：顯示5
       <button class="reload-poi-button">重整</button>
     </div>
     <div class="footer">
