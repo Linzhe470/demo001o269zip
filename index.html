@@ -1,451 +1,226 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <title>附近的便利商店</title>
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
-    <script
-      type="text/javascript"
-      src="https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar-threex-location-only.js"
-    ></script>
-    <script
-      type="text/javascript"
-      src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"
-    ></script>
+    <script type='text/javascript'
+        src='https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar-threex-location-only.js'></script>
+    <script type='text/javascript'
+        src='https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js'></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap"
-      rel="stylesheet"
-    />
-    <link href="./css/style.css" rel="stylesheet" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap" rel="stylesheet">
+
+    <link href="./css/style.css" rel="stylesheet">
     <!-- 共用 AFRAME 事件註冊 -->
     <script src="./scripts/AFRAMEregister.js"></script>
-    <!--  -->
-    <!-- <script>
-      // 提供記錄是否已下載完 poi 資料，於 gps 更新時不再載一次
-      let poi_download = false;
-
-      window.onload = () => {
-        const el = document.querySelector("[gps-new-camera]");
-        const elInfo = document.querySelector(".arjs-loader-div");
-
-        elInfo.textContent = `GPS 訊號及資料讀取中`;
-
-        el.addEventListener("gps-camera-update-position", (e) => {
-          if ("geolocation" in navigator) {
-            elInfo.textContent = `🟢有|navigator中已具有geolocation`;
-            const options = {
-              enableHighAccuracy: true,
-              timeout: 5000,
-              maximumAge: 0,
-            };
-            //https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/getCurrentPosition
-            // 執行定位navigator.geolocation.getCurrentPosition
-            navigator.geolocation.getCurrentPosition(
-              (position) => {
-                // 顯示 GPS 精度
-                document.getElementById(
-                  "gps-info"
-                ).textContent += ` 誤差 ${position.coords.accuracy.toFixed(
-                  1
-                )} m`;
-                elInfo.textContent = `執行getCurrentPosition()`;
-              }
-              //,()=>{},options
-            );
-
-            // 顯示抓到的 GPS 坐標資訊
-            document.getElementById(
-              "gps-info"
-            ).textContent = `lon ${e.detail.position.longitude.toFixed(
-              4
-            )} lat ${e.detail.position.latitude.toFixed(4)}`;
-            elInfo.textContent = `抓到GPS`;
-            elInfo.textContent = `🔴poi_download:${poi_download}`;
-
-            if (!poi_download) {
-              // elInfo.textContent = `🔴無poi_download`;
-              // 使用 api 即時查回的資料
-              // than use it to load from remote APIs some places nearby
-              // dynamicLoadPlaces(e.detail.position)
-              elInfo.textContent = `🟠執行dynamicLoadPlaces()|呼叫QueryHandler.ashx`;
-              elInfo.textContent = `🟠執行x${e.detail.position.longitude}y${e.detail.position.latitude}`;
-              fetch("QueryHandler.ashx", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  "X-RW-Api-Key": "googleplacenearby",
-                  "X-RW-Api-Buffer-Meters": 200,
-                  "X-RW-Api-Lng": e.detail.position.longitude,
-                  "X-RW-Api-Lat": e.detail.position.latitude,
-                },
-              }).then((response) => {
-                if (!response.ok) {
-                  elInfo.textContent = `🔴執行dynamicLoadPlaces()失敗`;
-                  // throw new Error("Network response was not ok");
-                }
-                elInfo.textContent = `🟢執行dynamicLoadPlaces()成功`;
-                // return response.json();
-                console.log(response.json());
-                let { places } = response.json();
-
-                if (places === undefined) {
-                  //找不到地標
-                  elInfo.textContent = `● 目前位置附近查詢不到任何地標資訊，請移動到其他位置後點選下方【重整】鈕進行查詢。`;
-                  alert(
-                    `● 目前位置附近查詢不到任何地標資訊，請移動到其他位置後點選下方【重整】鈕進行查詢。`
-                  );
-                } else {
-                  // renderPlaces(places);
-                  elInfo.textContent = `● ${places.length} 筆資料載入完成，請轉動鏡頭找尋物件。\n● 點選物件可顯示資訊。\n● 【重整】鈕可重新查詢附近地標。`;
-
-                  alert(
-                    `● ${places.length} 筆資料載入完成，請轉動鏡頭找尋物件。\n● 點選物件可顯示資訊。\n● 【重整】鈕可重新查詢附近地標。`
-                  );
-                }
-                //   poi_download = true;
-                // let scene = document.querySelector("a-scene");
-                // // 增加公司 資料
-                // const rwlogoEntity = document.createElement("a-entity");
-                // rwlogoEntity.setAttribute("gps-new-entity-place", {
-                //   latitude: e.detail.position.latitude,
-                //   longitude: e.detail.position.longitude,
-                // });
-                // // Logo
-                // elInfo.textContent = `🟢新增a-image`;
-                // const rwlogo = document.createElement("a-image");
-                // rwlogo.setAttribute("look-at", "#acamera");
-                // rwlogo.setAttribute("src", "./assets/RWLOGO-02-50.png");
-                // rwlogo.setAttribute("scale", { x: 10, y: 10, z: 10 });
-                // rwlogo.setAttribute("rotation", { x: -90, y: 0, z: 0 });
-                // rwlogo.setAttribute("position", { x: 0, y: -30, z: 0 });
-                // rwlogoEntity.appendChild(rwlogo);
-
-                // scene.appendChild(rwlogoEntity);
-              });
-              // return dynamicLoadPlaces(e.detail.position).then((apiPlaces) => {
-              //   let { places } = apiPlaces;
-              //   if (places === undefined) {
-              //     //找不到地標
-              //     alert(
-              //       `● 目前位置附近查詢不到任何地標資訊，請移動到其他位置後點選下方【重整】鈕進行查詢。`
-              //     );
-              //   } else {
-              //     renderPlaces(places);
-              //     alert(
-              //       `● ${places.length} 筆資料載入完成，請轉動鏡頭找尋物件。\n● 點選物件可顯示資訊。\n● 【重整】鈕可重新查詢附近地標。`
-              //     );
-              //   }
-              //   // 關閉載入中訊息遮罩
-              //   document.querySelector(".arjs-loader").style.display = "none";
-              //   poi_download = true;
-
-              //   let scene = document.querySelector("a-scene");
-              //   // 增加公司 資料
-              //   const rwlogoEntity = document.createElement("a-entity");
-              //   rwlogoEntity.setAttribute("gps-new-entity-place", {
-              //     latitude: e.detail.position.latitude,
-              //     longitude: e.detail.position.longitude,
-              //   });
-              //   // Logo
-              //   const rwlogo = document.createElement("a-image");
-              //   rwlogo.setAttribute("look-at", "#acamera");
-              //   rwlogo.setAttribute("src", "./assets/RWLOGO-02-50.png");
-              //   rwlogo.setAttribute("scale", { x: 10, y: 10, z: 10 });
-              //   rwlogo.setAttribute("rotation", { x: -90, y: 0, z: 0 });
-              //   rwlogo.setAttribute("position", { x: 0, y: -30, z: 0 });
-              //   rwlogoEntity.appendChild(rwlogo);
-
-              //   scene.appendChild(rwlogoEntity);
-              // });
-            }
-          } else {
-            elInfo.textContent = `🔴無|navigator中未具有geolocation`;
-            /* geolocation IS NOT available */
-          }
-        });
-
-        // 註冊 更新資料 鈕的處理事件
-        document
-          .querySelector(".reload-poi-button")
-          .addEventListener("click", function () {
-            window.location.reload();
-          });
-      };
-
-      // 透過 Google Place searchNearby 新版 API 取得地標資料
-      function dynamicLoadPlaces(position) {
-        elInfo.textContent = `🟠執行dynamicLoadPlaces()|呼叫QueryHandler.ashx`;
-        return fetch("QueryHandler.ashx", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-RW-Api-Key": "googleplacenearby",
-            "X-RW-Api-Buffer-Meters": 200,
-            "X-RW-Api-Lng": position.longitude,
-            "X-RW-Api-Lat": position.latitude,
-          },
-        }).then((response) => {
-          if (!response.ok) {
-            elInfo.textContent = `🔴執行dynamicLoadPlaces()失敗`;
-            throw new Error("Network response was not ok");
-          }
-          elInfo.textContent = `🟢執行dynamicLoadPlaces()成功`;
-          return response.json();
-        });
-      }
-
-      // 將地標資料繪製到 a-scene 中
-      function renderPlaces(places) {
-        //alert(JSON.stringify(places))
-        let scene = document.querySelector("a-scene");
-
-        places.forEach((place) => {
-          let latitude = place.location.latitude;
-          let longitude = place.location.longitude;
-          let displayName = place.displayName.text;
-          let formattedAddress = place.formattedAddress;
-
-          const poiEntity = document.createElement("a-entity");
-          poiEntity.setAttribute("gps-new-entity-place", {
-            latitude: latitude,
-            longitude: longitude,
-          });
-
-          const sphere = document.createElement("a-sphere");
-          sphere.setAttribute("scale", { x: 2, y: 2, z: 2 });
-          sphere.setAttribute("look-at", "#acamera");
-          sphere.setAttribute("material", { color: "red" });
-          sphere.setAttribute("position", { x: 0, y: 0, z: 0 });
-          sphere.setAttribute("opacity", "0.2");
-
-          const imgtext = document.createElement("a-image");
-          const textScale = 15;
-          imgtext.setAttribute("opacity", "0.8");
-          imgtext.setAttribute("look-at", "#acamera");
-          imgtext.setAttribute("scale", {
-            x: textScale,
-            y: textScale,
-            z: textScale,
-          });
-          imgtext.setAttribute("rotation", { x: 0, y: 0, z: 0 });
-          imgtext.setAttribute("position", { x: 0, y: 12, z: 0 });
-
-          const displayTextElement = document.createElement("div");
-          displayTextElement.className = "displayTextElement";
-          displayTextElement.innerHTML = displayName.replace(" ", "<br>");
-          //加到 body 後才畫的出來
-          document.body.appendChild(displayTextElement);
-          html2canvas(displayTextElement, { backgroundColor: null }).then(
-            (canvas) => {
-              imgtext.setAttribute("src", canvas.toDataURL("image/png"));
-
-              poiEntity.appendChild(sphere);
-              poiEntity.appendChild(imgtext);
-
-              // 增加點擊事件
-              poiEntity.addEventListener("click", function () {
-                alert(`${displayName}\n${formattedAddress}`);
-              });
-              scene.appendChild(poiEntity);
-            }
-          );
-        });
-      }
-    </script> -->
     <script>
-      // 提供記錄是否已下載完 poi 資料，於 gps 更新時不再載一次
-      let poi_download = false;
-      const elInfo = document.querySelector(".arjs-loader-div");
-      elInfo.textContent = `GPS 訊號及資料讀取中`;
-      
-      window.onload = () => {
-        const el = document.querySelector("[gps-new-camera]");
+        // 提供記錄是否已下載完 poi 資料，於 gps 更新時不再載一次
+        let poi_download = false;
 
-        el.addEventListener("gps-camera-update-position", (e) => {
-          if ("geolocation" in navigator) {
-            const options = {
-              enableHighAccuracy: true,
-              timeout: 5000,
-              maximumAge: 0,
-            };
-            //https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/getCurrentPosition
-            navigator.geolocation.getCurrentPosition(
-              (position) => {
-                // 顯示 GPS 精度
-                document.getElementById(
-                  "gps-info"
-                ).textContent += ` 誤差 ${position.coords.accuracy.toFixed(
-                  1
-                )} m`;
-              }
-              //,()=>{},options
-            );
+        window.onload = () => {
 
-            // 顯示抓到的 GPS 坐標資訊
-            document.getElementById(
-              "gps-info"
-            ).textContent = `lon ${e.detail.position.longitude.toFixed(
-              4
-            )} lat ${e.detail.position.latitude.toFixed(4)}`;
+            const el = document.querySelector("[gps-new-camera]");
 
-            if (!poi_download) {
-              // 使用 api 即時查回的資料
-              // than use it to load from remote APIs some places nearby
-              return dynamicLoadPlaces(e.detail.position).then((apiPlaces) => {
-                let { places } = apiPlaces;
-                if (places === undefined) {
-                  //找不到地標
-                  alert(
-                    `● 目前位置附近查詢不到任何地標資訊，請移動到其他位置後點選下方【重整】鈕進行查詢。`
-                  );
+            el.addEventListener("gps-camera-update-position", e => {
+
+                if ("geolocation" in navigator) {
+
+                    const options = {
+                        enableHighAccuracy: true,
+                        timeout: 5000,
+                        maximumAge: 0,
+                    };
+                    //https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/getCurrentPosition
+                    navigator.geolocation.getCurrentPosition((position) => {
+                        // 顯示 GPS 精度
+                        document.getElementById('gps-info').textContent += ` 誤差 ${position.coords.accuracy.toFixed(1)} m`;
+
+                    }
+                        //,()=>{},options
+                    );
+
+                    // 顯示抓到的 GPS 坐標資訊
+                    document.getElementById('gps-info').textContent = `lon ${e.detail.position.longitude.toFixed(4)} lat ${e.detail.position.latitude.toFixed(4)}`;
+
+
+                    if (!poi_download) {
+
+                        // 使用 api 即時查回的資料
+                        // than use it to load from remote APIs some places nearby
+                        return dynamicLoadPlaces(e.detail.position)
+                            .then((apiPlaces) => {
+                                let { places } = apiPlaces;
+                                if (places === undefined) {
+                                    //找不到地標
+                                    alert(`● 目前位置附近查詢不到任何地標資訊，請移動到其他位置後點選下方【重整】鈕進行查詢。`);
+                                } else {
+                                    renderPlaces(places);
+                                    alert(`● ${places.length} 筆資料載入完成，請轉動鏡頭找尋物件。\n● 點選物件可顯示資訊。\n● 【重整】鈕可重新查詢附近地標。`);
+                                }
+                                // 關閉載入中訊息遮罩
+                                document.querySelector('.arjs-loader').style.display = 'none';
+                                poi_download = true;
+
+                                let scene = document.querySelector('a-scene');
+                                // 增加公司 資料 
+                                const rwlogoEntity = document.createElement("a-entity");
+                                rwlogoEntity.setAttribute('gps-new-entity-place', {
+                                    latitude: e.detail.position.latitude,
+                                    longitude: e.detail.position.longitude
+                                });
+                                // Logo 
+                                const rwlogo = document.createElement("a-image");
+                                rwlogo.setAttribute("look-at", "#acamera");
+                                rwlogo.setAttribute("src", "./assets/RWLOGO-02-50.png");
+                                rwlogo.setAttribute("scale", { x: 10, y: 10 , z: 10 });
+                                rwlogo.setAttribute("rotation", { x: -90, y: 0, z: 0 });
+                                rwlogo.setAttribute("position", { x: 0, y: -30, z: 0 });
+                                rwlogoEntity.appendChild(rwlogo);
+
+                                scene.appendChild(rwlogoEntity);
+
+                            });
+
+
+                    }
+
+
                 } else {
-                  renderPlaces(places);
-                  alert(
-                    `● ${places.length} 筆資料載入完成，請轉動鏡頭找尋物件。\n● 點選物件可顯示資訊。\n● 【重整】鈕可重新查詢附近地標。`
-                  );
+                    /* geolocation IS NOT available */
                 }
-                // 關閉載入中訊息遮罩
-                document.querySelector(".arjs-loader").style.display = "none";
-                poi_download = true;
 
-                let scene = document.querySelector("a-scene");
-                // 增加公司 資料
-                const rwlogoEntity = document.createElement("a-entity");
-                rwlogoEntity.setAttribute("gps-new-entity-place", {
-                  latitude: e.detail.position.latitude,
-                  longitude: e.detail.position.longitude,
+
+            });
+
+
+
+            // 註冊 更新資料 鈕的處理事件
+            document
+                .querySelector(".reload-poi-button")
+                .addEventListener("click", function () {
+
+                    window.location.reload();
+
                 });
-                // Logo
-                const rwlogo = document.createElement("a-image");
-                rwlogo.setAttribute("look-at", "#acamera");
-                rwlogo.setAttribute("src", "./assets/RWLOGO-02-50.png");
-                rwlogo.setAttribute("scale", { x: 10, y: 10, z: 10 });
-                rwlogo.setAttribute("rotation", { x: -90, y: 0, z: 0 });
-                rwlogo.setAttribute("position", { x: 0, y: -30, z: 0 });
-                rwlogoEntity.appendChild(rwlogo);
 
-                scene.appendChild(rwlogoEntity);
-              });
-            }
-          } else {
-            /* geolocation IS NOT available */
-          }
-        });
+        };
 
-        // 註冊 更新資料 鈕的處理事件
-        document
-          .querySelector(".reload-poi-button")
-          .addEventListener("click", function () {
-            window.location.reload();
-          });
-      };
+        // 透過 Google Place searchNearby 新版 API 取得地標資料
+        function dynamicLoadPlaces(position) {
 
-      // 透過 Google Place searchNearby 新版 API 取得地標資料
-      function dynamicLoadPlaces(position) {
-        return fetch("QueryHandler.ashx", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-RW-Api-Key": "googleplacenearby",
-            "X-RW-Api-Buffer-Meters": 200,
-            "X-RW-Api-Lng": position.longitude,
-            "X-RW-Api-Lat": position.latitude,
-          },
-        }).then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          return response.json();
-        });
-      }
 
-      // 將地標資料繪製到 a-scene 中
-      function renderPlaces(places) {
-        //alert(JSON.stringify(places))
-        let scene = document.querySelector("a-scene");
+            return fetch('QueryHandler.ashx', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-RW-Api-Key': "googleplacenearby",
+                    'X-RW-Api-Buffer-Meters': 200,
+                    'X-RW-Api-Lng': position.longitude,
+                    'X-RW-Api-Lat': position.latitude,
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                });
 
-        places.forEach((place) => {
-          let latitude = place.location.latitude;
-          let longitude = place.location.longitude;
-          let displayName = place.displayName.text;
-          let formattedAddress = place.formattedAddress;
 
-          const poiEntity = document.createElement("a-entity");
-          poiEntity.setAttribute("gps-new-entity-place", {
-            latitude: latitude,
-            longitude: longitude,
-          });
+        };
 
-          const sphere = document.createElement("a-sphere");
-          sphere.setAttribute("scale", { x: 2, y: 2, z: 2 });
-          sphere.setAttribute("look-at", "#acamera");
-          sphere.setAttribute("material", { color: "red" });
-          sphere.setAttribute("position", { x: 0, y: 0, z: 0 });
-          sphere.setAttribute("opacity", "0.2");
+        // 將地標資料繪製到 a-scene 中
+        function renderPlaces(places) {
+            //alert(JSON.stringify(places))
+            let scene = document.querySelector('a-scene');
 
-          const imgtext = document.createElement("a-image");
-          const textScale = 15;
-          imgtext.setAttribute("opacity", "0.8");
-          imgtext.setAttribute("look-at", "#acamera");
-          imgtext.setAttribute("scale", {
-            x: textScale,
-            y: textScale,
-            z: textScale,
-          });
-          imgtext.setAttribute("rotation", { x: 0, y: 0, z: 0 });
-          imgtext.setAttribute("position", { x: 0, y: 12, z: 0 });
+            places.forEach((place) => {
+                let latitude = place.location.latitude;
+                let longitude = place.location.longitude;
+                let displayName = place.displayName.text;
+                let formattedAddress = place.formattedAddress;
 
-          const displayTextElement = document.createElement("div");
-          displayTextElement.className = "displayTextElement";
-          displayTextElement.innerHTML = displayName.replace(" ", "<br>");
-          //加到 body 後才畫的出來
-          document.body.appendChild(displayTextElement);
-          html2canvas(displayTextElement, { backgroundColor: null }).then(
-            (canvas) => {
-              imgtext.setAttribute("src", canvas.toDataURL("image/png"));
+                const poiEntity = document.createElement("a-entity");
+                poiEntity.setAttribute('gps-new-entity-place', {
+                    latitude: latitude,
+                    longitude: longitude
+                });
 
-              poiEntity.appendChild(sphere);
-              poiEntity.appendChild(imgtext);
+                const sphere = document.createElement("a-sphere");
+                sphere.setAttribute("scale", { x: 2, y: 2, z: 2 });
+                sphere.setAttribute("look-at", "#acamera");
+                sphere.setAttribute('material', { color: 'red' });
+                sphere.setAttribute("position", { x: 0, y: 0, z: 0 });
+                sphere.setAttribute("opacity", "0.2");
 
-              // 增加點擊事件
-              poiEntity.addEventListener("click", function () {
-                alert(`${displayName}\n${formattedAddress}`);
-              });
-              scene.appendChild(poiEntity);
-            }
-          );
-        });
-      }
+
+                const imgtext = document.createElement("a-image");
+                const textScale = 15;
+                imgtext.setAttribute("opacity", "0.8");
+                imgtext.setAttribute("look-at", "#acamera");
+                imgtext.setAttribute("scale", { x: textScale, y: textScale, z: textScale });
+                imgtext.setAttribute("rotation", { x: 0, y: 0, z: 0 });
+                imgtext.setAttribute("position", { x: 0, y: 12, z: 0 });
+
+                const displayTextElement = document.createElement("div");
+                displayTextElement.className = "displayTextElement";
+                displayTextElement.innerHTML = displayName.replace(' ', '<br>');
+                //加到 body 後才畫的出來
+                document.body.appendChild(displayTextElement);
+                html2canvas(displayTextElement, { backgroundColor: null })
+                    .then(canvas => {
+                        imgtext.setAttribute("src", canvas.toDataURL("image/png"));
+
+                        poiEntity.appendChild(sphere);
+                        poiEntity.appendChild(imgtext);
+
+                        // 增加點擊事件
+                        poiEntity.addEventListener('click', function () {
+                            alert(`${displayName}\n${formattedAddress}`);
+                        });
+                        scene.appendChild(poiEntity);
+                    });
+
+
+            });
+
+
+
+
+
+        }
+
+
+
+
     </script>
-  </head>
 
-  <body style="margin: 0px; overflow: hidden">
+
+</head>
+
+<body style="margin : 0px; overflow: hidden;">
     <div class="arjs-loader">
-      <div class="arjs-loader-div"></div>
+        <div>GPS 訊號及資料讀取中</div>
     </div>
     <div class="header">
-      AR：顯示7
-      <button class="reload-poi-button">重整</button>
+        <img src="./assets/RWLOGO-01-1.png" class="logoicon" />
+        AR：附近200M的便利商店
     </div>
     <div class="footer">
-      <span id="gps-info">GPS...</span>
-      <button class="reload-poi-button">重整</button>
+        <span id="gps-info">GPS...</span>
+        <button class="reload-poi-button">重整</button>
     </div>
-    <a-scene
-      vr-mode-ui="enabled: false"
-      cursor="rayOrigin: mouse"
-      raycaster="near: 0; far: 50000"
-      arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false"
-      renderer="antialias: true; alpha: true"
-      gesture-detector
-    >
-      <a-camera
-        id="acamera"
-        gps-new-camera="gpsMinDistance: 5; positionMinAccuracy: 30; alert: false;"
-      ></a-camera>
+    <a-scene vr-mode-ui='enabled: false' cursor='rayOrigin: mouse' raycaster='near: 0; far: 50000'
+        arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true'
+        gesture-detector>
+        <a-camera id="acamera" gps-new-camera='gpsMinDistance: 5; positionMinAccuracy: 30; alert: false;'></a-camera>
     </a-scene>
-  </body>
+</body>
+
 </html>
