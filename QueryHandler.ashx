@@ -50,7 +50,7 @@ public class QueryHandler : IHttpHandler
 
                 // 驗證呼叫此程式的網址是否符合白名單
                 string RefererValue = Request.Headers["Referer"];
-                string[] allowReferes = { "https://rw3d.chuanhwa.com.tw/", "https://demo.chuanhwa.com.tw/", "https://linzhe470.github.io" };
+                string[] allowReferes = { "https://rw3d.chuanhwa.com.tw/", "https://demo.chuanhwa.com.tw/", "https://linzhe470.github.io/", "http://127.0.0.1:5501/" };
                 bool validPassed = false;
                 foreach (string referer in allowReferes)
                 {
@@ -176,6 +176,7 @@ public class QueryHandler : IHttpHandler
         else
         {
             // 如果不是 POST 請求，返回錯誤訊息
+            console.log(11111111) 
             context.Response.StatusCode = 405;
             context.Response.Write("Method Not Allowed");
         }
