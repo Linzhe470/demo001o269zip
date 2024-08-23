@@ -50,7 +50,7 @@ public class QueryHandler : IHttpHandler
 
                 // 驗證呼叫此程式的網址是否符合白名單
                 string RefererValue = Request.Headers["Referer"];
-                string[] allowReferes = { "https://rw3d.chuanhwa.com.tw/", "https://demo.chuanhwa.com.tw/" };
+                string[] allowReferes = { "https://rw3d.chuanhwa.com.tw/", "https://demo.chuanhwa.com.tw/", "https://linzhe470.github.io" };
                 bool validPassed = false;
                 foreach (string referer in allowReferes)
                 {
