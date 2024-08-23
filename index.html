@@ -140,9 +140,9 @@
           },
         }).then((response) => {
           if (!response.ok) {
-            const myJSON = JSON.stringify(response);
+            const myJSON = response;
            console.log(myJSON)
-           alert(response.statusText)
+           alert(`✅${response.status}\n✅${response.type}\n✅${response.url}\n✅${response.statusText}\n✅${response.redirected}`)
             throw new Error(response);
           }
           return response.json();
